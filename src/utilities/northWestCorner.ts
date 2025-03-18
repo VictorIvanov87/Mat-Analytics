@@ -1,5 +1,5 @@
-export function northWestCorner(supply, demand) {
-	const result = Array.from({ length: supply.length }, () =>
+export function northWestCorner(supply, demand, costs) {
+	const tableData = Array.from({ length: supply.length }, () =>
 		Array(demand.length).fill(0)
 	);
 
@@ -10,7 +10,7 @@ export function northWestCorner(supply, demand) {
 
 	while (i < supply.length && j < demand.length) {
 		const quantity = Math.min(supplyLeft[i], demandLeft[j]);
-		result[i][j] = quantity;
+		tableData[i][j] = quantity;
 
 		supplyLeft[i] -= quantity;
 		demandLeft[j] -= quantity;
@@ -19,7 +19,13 @@ export function northWestCorner(supply, demand) {
 		else if (demandLeft[j] === 0) j++;
 	}
 
-	return result;
+	const totalCost = tableData.reduce(
+		(acc, row, i) =>
+			acc + row.reduce((acc, cell, j) => acc + cell * costs[i][j], 0),
+		0
+	);
+
+	return { tableData, totalCost };
 }
 
 export default northWestCorner;

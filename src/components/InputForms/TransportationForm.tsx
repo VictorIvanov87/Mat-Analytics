@@ -152,6 +152,7 @@ const TransportationForm = () => {
 				consumers={consumers}
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
+				costs={costs}
 				setSolution={setSolution}
 			/>
 			<PotentialsMethod
