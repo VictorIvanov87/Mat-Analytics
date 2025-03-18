@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Heading, Separator } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Separator } from "@chakra-ui/react";
 import SuppliersForm from "./SuppliersForm";
 import ConsumersForm from "./ConsumersForm";
 import Supplies from "./Supplies";
@@ -16,18 +16,50 @@ const TransportationForm = () => {
 	const [demandQuantities, setDemandQuantities] = useState([0]);
 	const [solution, setSolution] = useState<number[][] | null>(null);
 	const [costs, setCosts] = useState([[0]]);
+	const [exampleTaskLoaded, setExampleTaskLoaded] = useState(false);
 
 	useEffect(() => {
+		if (exampleTaskLoaded) return;
+
 		const m = suppliers.length;
 		const n = consumers.length;
 		const newCosts = Array(m)
 			.fill(null)
 			.map(() => Array(n).fill(0));
 		setCosts(newCosts);
-	}, [suppliers, consumers]);
+	}, [suppliers, consumers, exampleTaskLoaded]);
+
+	const loadExample = () => {
+		setExampleTaskLoaded(true);
+		setSuppliers(["A", "B", "C"]);
+		setSupplyQuantities([4600, 3400, 3000]);
+		setConsumers(["1", "2", "3", "4"]);
+		setDemandQuantities([3500, 2000, 4500, 1000]);
+		setCosts([
+			[30, 40, 60, 10],
+			[50, 10, 20, 30],
+			[40, 50, 80, 10],
+		]);
+	};
+
+	const clearAllData = () => {
+		setSuppliers(["A"]);
+		setSupplyQuantities([0]);
+		setConsumers(["1"]);
+		setDemandQuantities([0]);
+		setSolution(null);
+		setCosts([[0]]);
+		setExampleTaskLoaded(false);
+	};
 
 	return (
 		<Box minW={500} maxW={800} mx="auto" mt={10}>
+			<Flex justify="space-between">
+				<Button onClick={loadExample}>
+					Зареди примерна задача от заданието
+				</Button>
+				<Button onClick={clearAllData}>Изчисти всички данни</Button>
+			</Flex>
 			<Separator size="md" mt={10} mb={10} />
 			<Heading as="h2" size="2xl" m={2} textAlign="center">
 				1. Товар:
