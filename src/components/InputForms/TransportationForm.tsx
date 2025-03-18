@@ -8,13 +8,22 @@ import BalanceIndicator from "./BalanceIndicator";
 import NorthWestCornerMethod from "../Solutions/NorthWestCornerMethod";
 import PotentialsMethod from "../Solutions/PotentialsMethod";
 import Costs from "./Costs";
+import MinimalCostMethod from "../Solutions/MinimalCostMethod";
 
 const TransportationForm = () => {
 	const [suppliers, setSuppliers] = useState(["A"]);
 	const [supplyQuantities, setSupplyQuantities] = useState([0]);
 	const [consumers, setConsumers] = useState(["1"]);
 	const [demandQuantities, setDemandQuantities] = useState([0]);
-	const [solution, setSolution] = useState<number[][] | null>(null);
+	const [northWestSolution, setNorthWestSolution] = useState<
+		number[][] | null
+	>(null);
+	const [minimalCostSolution, setMinimalCostSolution] = useState<
+		number[][] | null
+	>(null);
+	const [potentialsSolution, setPotentialsSolution] = useState<
+		number[][] | null
+	>(null);
 	const [costs, setCosts] = useState([[0]]);
 	const [exampleTaskLoaded, setExampleTaskLoaded] = useState(false);
 
@@ -47,7 +56,9 @@ const TransportationForm = () => {
 		setSupplyQuantities([0]);
 		setConsumers(["1"]);
 		setDemandQuantities([0]);
-		setSolution(null);
+		setNorthWestSolution(null);
+		setMinimalCostSolution(null);
+		setPotentialsSolution(null);
 		setCosts([[0]]);
 		setExampleTaskLoaded(false);
 	};
@@ -147,17 +158,26 @@ const TransportationForm = () => {
 				3. Изчисления:
 			</Heading>
 			<NorthWestCornerMethod
-				solution={solution}
+				solution={northWestSolution}
 				suppliers={suppliers}
 				consumers={consumers}
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
 				costs={costs}
-				setSolution={setSolution}
+				setSolution={setNorthWestSolution}
+			/>
+			<MinimalCostMethod
+				solution={minimalCostSolution}
+				suppliers={suppliers}
+				consumers={consumers}
+				supplyQuantities={supplyQuantities}
+				demandQuantities={demandQuantities}
+				costs={costs}
+				setSolution={setMinimalCostSolution}
 			/>
 			<PotentialsMethod
-				costs={costs} // Коректно изпращане на costs
-				initialSolution={solution}
+				costs={costs}
+				initialSolution={minimalCostSolution}
 				suppliers={suppliers}
 				consumers={consumers}
 			/>
