@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"lib": ["dom", "es2015"],
+		"moduleResolution": "Bundler",
+		"skipLibCheck": true,
+		"jsx": "react",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	}
+}
