@@ -1,6 +1,21 @@
 import React, { useState } from "react";
-import { Table, Box, Button, Text } from "@chakra-ui/react";
+import { Table, Box, Button, Text, Flex } from "@chakra-ui/react";
 import northWestCorner from "../../utilities/northWestCorner";
+
+const TableCellContent = ({
+	leftContent,
+	rightContent,
+}: {
+	leftContent: React.ReactNode;
+	rightContent: React.ReactNode;
+}) => (
+	<Box as="div">
+		<Flex justifyContent="space-between">
+			<Box color="blue.500">{leftContent}</Box>
+			<Box>{rightContent}</Box>
+		</Flex>
+	</Box>
+);
 
 const NorthWestCornerMethod = ({
 	solution,
@@ -43,25 +58,49 @@ const NorthWestCornerMethod = ({
 									От / До
 								</Table.Cell>
 								{consumers.map((c, idx) => (
-									<Table.Cell fontWeight="bold" key={idx}>
+									<Table.Cell
+										fontWeight="bold"
+										key={idx}
+										textAlign="center"
+									>
 										{c}
 									</Table.Cell>
 								))}
+								<Table.Cell fontWeight="bold">Общо</Table.Cell>
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
 							{solution.map((row, i) => (
 								<Table.Row key={i} bg="transparent">
-									<Table.Cell fontWeight="bold" w={20}>
+									<Table.Cell
+										fontWeight="bold"
+										w={20}
+										textAlign="center"
+									>
 										{suppliers[i]}
 									</Table.Cell>
 									{row.map((cell, j) => (
-										<Table.Cell key={j}>
-											{cell || "-"}
+										<Table.Cell key={j} fontWeight="bold">
+											<TableCellContent
+												leftContent={cell || "-"}
+												rightContent={`(${costs[i][j]})`}
+											/>
 										</Table.Cell>
 									))}
+									<Table.Cell fontWeight="bold">
+										{supplyQuantities[i]}
+									</Table.Cell>
 								</Table.Row>
 							))}
+							<Table.Row bg="transparent">
+								<Table.Cell fontWeight="bold">Общо</Table.Cell>
+								{demandQuantities.map((d, idx) => (
+									<Table.Cell fontWeight="bold" key={idx}>
+										{d}
+									</Table.Cell>
+								))}
+								<Table.Cell></Table.Cell>
+							</Table.Row>
 						</Table.Body>
 					</Table.Root>
 					<Text mt={4} textAlign="right">

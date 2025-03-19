@@ -155,7 +155,7 @@ const TransportationForm = () => {
 			/>
 			<Separator size="md" mt={10} mb={10} />
 			<Heading as="h2" size="2xl" m={2} textAlign="center">
-				3. Изчисления:
+				3. Изчисления по метода на северозападния ъгъл:
 			</Heading>
 			<NorthWestCornerMethod
 				solution={northWestSolution}
@@ -166,6 +166,19 @@ const TransportationForm = () => {
 				costs={costs}
 				setSolution={setNorthWestSolution}
 			/>
+			<PotentialsMethod
+				costs={costs}
+				initialSolution={northWestSolution}
+				initialSolutionType="northWest"
+				suppliers={suppliers}
+				consumers={consumers}
+				supplyQuantities={supplyQuantities}
+				demandQuantities={demandQuantities}
+			/>
+			<Separator size="md" mt={10} mb={10} />
+			<Heading as="h2" size="2xl" m={2} textAlign="center">
+				3. Изчисления по метода на минималният елемент:
+			</Heading>
 			<MinimalCostMethod
 				solution={minimalCostSolution}
 				suppliers={suppliers}
@@ -178,8 +191,11 @@ const TransportationForm = () => {
 			<PotentialsMethod
 				costs={costs}
 				initialSolution={minimalCostSolution}
+				initialSolutionType="minimalCost"
 				suppliers={suppliers}
 				consumers={consumers}
+				supplyQuantities={supplyQuantities}
+				demandQuantities={demandQuantities}
 			/>
 			<Separator size="md" mt={10} mb={10} />
 		</Box>
