@@ -1,3 +1,5 @@
+import { calculatePotentials, getPositiveDeltas } from "./potentialsMethod";
+
 type PositiveDelta = {
 	delta: number;
 	cell: [number, number];
@@ -7,18 +9,6 @@ type CycleCell = {
 	coords: [number, number];
 	sign: "+" | "-";
 };
-
-function buildCycleMatrix(rows: number, cols: number): (string | null)[][] {
-	const matrix: (string | null)[][] = [];
-	for (let i = 0; i < rows; i++) {
-		const row: (string | null)[] = [];
-		for (let j = 0; j < cols; j++) {
-			row.push(null);
-		}
-		matrix.push(row);
-	}
-	return matrix;
-}
 
 const DIRECTIONS = [
 	[-1, 0],
@@ -45,11 +35,9 @@ function dfsCycle(
 ): [number, number][] | null {
 	const [sr, sc] = start;
 	const [r, c] = path[path.length - 1];
-
 	if (path.length >= 4 && r === sr && c === sc) {
 		return path;
 	}
-
 	for (const [dr, dc] of DIRECTIONS) {
 		const nr = r + dr;
 		const nc = c + dc;
@@ -131,7 +119,7 @@ function applyReallocation(
 	}
 }
 
-function totalCost(allocation: number[][], costs: number[][]): number {
+function costOfPlan(allocation: number[][], costs: number[][]): number {
 	let sum = 0;
 	for (let i = 0; i < allocation.length; i++) {
 		for (let j = 0; j < allocation[0].length; j++) {
@@ -147,44 +135,54 @@ export function newOptimalPlan(
 	positives: { delta: number; cell: [number, number] }[]
 ): {
 	newAllocation: number[][];
-	signMatrix: (string | null)[][];
 	totalCost: number;
 } {
-	if (!positives.length) {
-		return {
-			newAllocation: allocation,
-			signMatrix: buildCycleMatrix(
-				allocation.length,
-				allocation[0].length
-			),
-			totalCost: totalCost(allocation, costs),
-		};
-	}
-	const bestCell = positives[0].cell;
-	const cycle = buildCycle(allocation, bestCell);
-	if (!cycle || cycle.length <= 3) {
-		return {
-			newAllocation: allocation,
-			signMatrix: buildCycleMatrix(
-				allocation.length,
-				allocation[0].length
-			),
-			totalCost: totalCost(allocation, costs),
-		};
-	}
-	const markedCycle = markPlusMinus(cycle);
-	applyReallocation(allocation, markedCycle);
-	const signMatrix = buildCycleMatrix(
-		allocation.length,
-		allocation[0].length
-	);
-	for (const c of markedCycle) {
-		const [row, col] = c.coords;
-		signMatrix[row][col] = c.sign;
+	for (const positive of positives) {
+		debugger;
+		const cycle = buildCycle(allocation, positive.cell);
+		if (cycle && cycle.length > 3) {
+			const markedCycle = markPlusMinus(cycle);
+			applyReallocation(allocation, markedCycle);
+			return {
+				newAllocation: allocation,
+				totalCost: costOfPlan(allocation, costs),
+			};
+		}
 	}
 	return {
 		newAllocation: allocation,
-		signMatrix,
-		totalCost: totalCost(allocation, costs),
+		totalCost: costOfPlan(allocation, costs),
+	};
+}
+
+export function iterativeOptimization(
+	allocation: number[][],
+	costs: number[][]
+): {
+	finalAllocation: number[][];
+	finalCost: number;
+} {
+	let improved = true;
+	while (improved) {
+		const oldCost = costOfPlan(allocation, costs);
+		const { u, v } = calculatePotentials(costs, allocation);
+		const positives = getPositiveDeltas(costs, allocation, { u, v });
+		if (!positives.length) {
+			break;
+		}
+		improved = false;
+		const { newAllocation, totalCost } = newOptimalPlan(
+			allocation,
+			costs,
+			positives
+		);
+		if (totalCost < oldCost) {
+			allocation = newAllocation;
+			improved = true;
+		}
+	}
+	return {
+		finalAllocation: allocation,
+		finalCost: costOfPlan(allocation, costs),
 	};
 }

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Table, Box, Button, Text, Flex } from "@chakra-ui/react";
-import { newOptimalPlan } from "../../utilities/optimalPlan";
+import {
+	iterativeOptimization,
+	newOptimalPlan,
+} from "../../utilities/optimalPlan";
 
 const TableCellContent = ({
 	leftContent,
@@ -31,14 +34,13 @@ const OptimalPlan = ({
 	const [matrix, setMatrix] = useState<string[][] | null>(null);
 
 	const findNewOptimalPlam = () => {
-		const { newAllocation, signMatrix, totalCost } = newOptimalPlan(
+		const { finalAllocation, finalCost } = iterativeOptimization(
 			solution,
-			costs,
-			positives
+			costs
 		);
-		setNewAllocation(newAllocation);
-		setMatrix(signMatrix);
-		setTotalCost(totalCost);
+		setNewAllocation(finalAllocation);
+		// setMatrix(signMatrix);
+		setTotalCost(finalCost);
 	};
 
 	return (
