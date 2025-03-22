@@ -1,12 +1,44 @@
-# React + Vite
+# Математически анализ - транспортна задача
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Този проект представлява приложение за решаване на транспортна задача, като комбинира различни методи за намиране и оптимизиране на първоначалното решение (северозападен ъгъл, минимален елемент, метод на потенциалите и итеративна оптимизация).
 
-Currently, two official plugins are available:
+## Как да тестваме решението?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Има два начина за стартиране на приложението:
 
-## Expanding the ESLint configuration
+### Локално стартиране
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Клонирайте репозиторито, инсталирайте зависимостите и стартирайте проекта локално:
+1. `git clone https://github.com/VictorIvanov87/Math-Analytics.git`
+2. отваряме свалента папка
+3. в нея инсталираме dependency-тата с `npm install`
+3. стартираме проекта с `npm run dev` и можем да го достъпим на `http://localhost:5173/`
+
+### Онлайн версия
+
+Можете да тествате решението и онлайн на следния линк:
+[https://transportation-problem-301iz.netlify.app/](https://transportation-problem-301iz.netlify.app/)
+
+## Как изглежда и се използва приложението?
+
+Приложението е разделено в няколко секции:
+
+### 1.Товар
+Тук можем да въведем пунктовете и консуматорите, както и техните стойности. Има ограничение от максимум 10 пункта и 10 консуматора. По подразбиране имената на пунктовете са A, B, C..., а тези на консуматорите 1, 2, 3..., но могат да бъдат променени при нужда. След въвеждане на стойностите се проврява дали задачата е от затворен тип.
+
+![Screenshot 2025-03-23 at 0 14 09](https://github.com/user-attachments/assets/8f874fab-64d4-4f2b-a681-32d276ed69bb)
+
+### 2. Транспортни разходи
+На база вече въведените пунктове и консуматори можем да попълним таблицата с транспортните разходи за тях.
+
+![Screenshot 2025-03-23 at 0 15 41](https://github.com/user-attachments/assets/d1a318fb-931e-44b8-9712-f8b4e4dffe85)
+
+### 3. Изчисления по метода на северозападния ъгъл
+В тази секция изчисляваме базистното решение по метода на северозападния ъгъл. След като имаме това решение, можем да намерим потенциалите и оптималния план.
+
+![Screenshot 2025-03-23 at 0 17 23](https://github.com/user-attachments/assets/9ab627f8-0cbf-4c78-ab39-f8d65de7f5b2)
+
+### 4. Изчисления по метода на минималния елемент
+В тази секция изчисляваме базистното решение по метода на минималния елемент. След като имаме това решение, можем да намерим потенциалите и оптималния план.
+
+![Screenshot 2025-03-23 at 0 18 04](https://github.com/user-attachments/assets/be911c3a-13d4-4b19-8c10-45c3e2958129)
