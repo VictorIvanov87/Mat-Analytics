@@ -49,64 +49,66 @@ const MinimalCostMethod = ({
 			>
 				Изчисли с метод на минималните разходи
 			</Button>
-			{solution && (
-				<>
-					<Table.Root showColumnBorder>
-						<Table.Header>
-							<Table.Row bg="transparent">
-								<Table.Cell fontWeight="bold">
-									От / До
+			<Table.Root showColumnBorder>
+				<Table.Header>
+					<Table.Row bg="transparent">
+						<Table.Cell fontWeight="bold">От / До</Table.Cell>
+						{consumers.map((c, idx) => (
+							<Table.Cell
+								fontWeight="bold"
+								key={idx}
+								textAlign="center"
+							>
+								{c}
+							</Table.Cell>
+						))}
+						<Table.Cell fontWeight="bold">Общо</Table.Cell>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{suppliers.map((supplier, i) => (
+						<Table.Row key={i} bg="transparent">
+							<Table.Cell
+								fontWeight="bold"
+								w={20}
+								textAlign="center"
+							>
+								{supplier}
+							</Table.Cell>
+							{consumers.map((_, j) => (
+								<Table.Cell key={j} fontWeight="bold">
+									{solution &&
+									solution[i] &&
+									solution[i][j] ? (
+										<TableCellContent
+											leftContent={solution[i][j]}
+											rightContent={`(${costs[i][j]})`}
+										/>
+									) : (
+										"-"
+									)}
 								</Table.Cell>
-								{consumers.map((c, idx) => (
-									<Table.Cell
-										fontWeight="bold"
-										key={idx}
-										textAlign="center"
-									>
-										{c}
-									</Table.Cell>
-								))}
-								<Table.Cell fontWeight="bold">Общо</Table.Cell>
-							</Table.Row>
-						</Table.Header>
-						<Table.Body>
-							{solution.map((row, i) => (
-								<Table.Row key={i} bg="transparent">
-									<Table.Cell
-										fontWeight="bold"
-										w={20}
-										textAlign="center"
-									>
-										{suppliers[i]}
-									</Table.Cell>
-									{row.map((cell, j) => (
-										<Table.Cell key={j} fontWeight="bold">
-											<TableCellContent
-												leftContent={cell || "-"}
-												rightContent={`(${costs[i][j]})`}
-											/>
-										</Table.Cell>
-									))}
-									<Table.Cell fontWeight="bold">
-										{supplyQuantities[i]}
-									</Table.Cell>
-								</Table.Row>
 							))}
-							<Table.Row bg="transparent">
-								<Table.Cell fontWeight="bold">Общо</Table.Cell>
-								{demandQuantities.map((d, idx) => (
-									<Table.Cell fontWeight="bold" key={idx}>
-										{d}
-									</Table.Cell>
-								))}
-								<Table.Cell></Table.Cell>
-							</Table.Row>
-						</Table.Body>
-					</Table.Root>
-					<Text mt={4} textAlign="right">
-						Общите транспортни разходи са: {totalCost}
-					</Text>
-				</>
+							<Table.Cell fontWeight="bold">
+								{supplyQuantities[i]}
+							</Table.Cell>
+						</Table.Row>
+					))}
+					<Table.Row bg="transparent">
+						<Table.Cell fontWeight="bold">Общо</Table.Cell>
+						{demandQuantities.map((d, idx) => (
+							<Table.Cell fontWeight="bold" key={idx}>
+								{d}
+							</Table.Cell>
+						))}
+						<Table.Cell></Table.Cell>
+					</Table.Row>
+				</Table.Body>
+			</Table.Root>
+			{solution && (
+				<Text mt={4} textAlign="right">
+					Общите транспортни разходи са: {totalCost}
+				</Text>
 			)}
 		</Box>
 	);

@@ -41,13 +41,8 @@ const OptimalPlan = ({
 	>(null);
 
 	const findNewOptimalPlam = () => {
-		const {
-			finalAllocation,
-			finalCost,
-			finalPositives,
-			finalPotentials,
-			iterations,
-		} = iterativeOptimization(solution, costs);
+		const { finalAllocation, finalCost, finalPositives, finalPotentials } =
+			iterativeOptimization(solution, costs);
 		setNewAllocation(finalAllocation);
 		setTotalCost(finalCost);
 		setFinalPotentials(finalPotentials);
@@ -61,6 +56,7 @@ const OptimalPlan = ({
 				bg="blue.500"
 				my={4}
 				onClick={findNewOptimalPlam}
+				disabled={!solution}
 			>
 				Намери оптимален план
 			</Button>
