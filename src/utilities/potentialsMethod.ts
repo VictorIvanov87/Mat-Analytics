@@ -1,5 +1,3 @@
-import { newOptimalPlan } from "./optimalPlan";
-
 type Potentials = {
 	u: number[];
 	v: number[];

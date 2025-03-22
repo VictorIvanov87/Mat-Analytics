@@ -31,13 +31,14 @@ const OptimalPlan = ({
 	const [matrix, setMatrix] = useState<string[][] | null>(null);
 
 	const findNewOptimalPlam = () => {
-		const { newAllocation, signMatrix } = newOptimalPlan(
+		const { newAllocation, signMatrix, totalCost } = newOptimalPlan(
 			solution,
 			costs,
 			positives
 		);
 		setNewAllocation(newAllocation);
 		setMatrix(signMatrix);
+		setTotalCost(totalCost);
 	};
 
 	return (

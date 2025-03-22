@@ -66,7 +66,17 @@ function dfsCycle(
 					[...path, [nr, nc]],
 					new Set(visited)
 				);
-				if (newPath) return newPath;
+				if (newPath) {
+					if (
+						newPath.length >= 2 &&
+						newPath[0][0] === newPath[newPath.length - 1][0] &&
+						newPath[0][1] === newPath[newPath.length - 1][1] &&
+						newPath.length > 4
+					) {
+						return newPath.slice(0, -1);
+					}
+					return newPath;
+				}
 			}
 		}
 	}
@@ -94,11 +104,9 @@ function markPlusMinus(cycle: [number, number][]): CycleCell[] {
 function applyReallocation(
 	allocation: number[][],
 	markedCells: CycleCell[]
-): number[][] | undefined {
+): void {
 	const plusCells: [number, number][] = [];
 	const minusCells: [number, number][] = [];
-	const allocationCopy = [...allocation];
-
 	for (const mc of markedCells) {
 		const [r, c] = mc.coords;
 		if (mc.sign === "+") {
@@ -107,29 +115,30 @@ function applyReallocation(
 			minusCells.push([r, c]);
 		}
 	}
-
 	if (!minusCells.length) return;
-
 	let t = Infinity;
 	for (const [r, c] of minusCells) {
-		const val = allocationCopy[r][c];
-		if (val > 0 && val < t) {
-			t = val;
-		}
+		const val = allocation[r][c];
+		if (val > 0 && val < t) t = val;
 	}
 	if (!isFinite(t) || t <= 0) return;
-
 	for (const [r, c] of plusCells) {
-		allocationCopy[r][c] += t;
+		allocation[r][c] += t;
 	}
 	for (const [r, c] of minusCells) {
-		allocationCopy[r][c] -= t;
-		if (allocationCopy[r][c] < 1e-8) {
-			allocationCopy[r][c] = 0;
+		allocation[r][c] -= t;
+		if (allocation[r][c] < 1e-8) allocation[r][c] = 0;
+	}
+}
+
+function totalCost(allocation: number[][], costs: number[][]): number {
+	let sum = 0;
+	for (let i = 0; i < allocation.length; i++) {
+		for (let j = 0; j < allocation[0].length; j++) {
+			sum += allocation[i][j] * costs[i][j];
 		}
 	}
-
-	return allocationCopy;
+	return sum;
 }
 
 export function newOptimalPlan(
@@ -139,6 +148,7 @@ export function newOptimalPlan(
 ): {
 	newAllocation: number[][];
 	signMatrix: (string | null)[][];
+	totalCost: number;
 } {
 	if (!positives.length) {
 		return {
@@ -147,24 +157,23 @@ export function newOptimalPlan(
 				allocation.length,
 				allocation[0].length
 			),
+			totalCost: totalCost(allocation, costs),
 		};
 	}
-
 	const bestCell = positives[0].cell;
 	const cycle = buildCycle(allocation, bestCell);
-	if (!cycle) {
+	if (!cycle || cycle.length <= 3) {
 		return {
 			newAllocation: allocation,
 			signMatrix: buildCycleMatrix(
 				allocation.length,
 				allocation[0].length
 			),
+			totalCost: totalCost(allocation, costs),
 		};
 	}
-
 	const markedCycle = markPlusMinus(cycle);
-	const newAllocation = applyReallocation(allocation, markedCycle);
-
+	applyReallocation(allocation, markedCycle);
 	const signMatrix = buildCycleMatrix(
 		allocation.length,
 		allocation[0].length
@@ -173,5 +182,9 @@ export function newOptimalPlan(
 		const [row, col] = c.coords;
 		signMatrix[row][col] = c.sign;
 	}
-	return { newAllocation, signMatrix };
+	return {
+		newAllocation: allocation,
+		signMatrix,
+		totalCost: totalCost(allocation, costs),
+	};
 }
