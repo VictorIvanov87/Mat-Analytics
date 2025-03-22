@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Table, Box, Button, Text, Flex } from "@chakra-ui/react";
-import northWestCorner from "../../utilities/northWestCornerMethod";
+import { newOptimalPlan } from "../../utilities/optimalPlan";
 
 const TableCellContent = ({
 	leftContent,
@@ -17,26 +17,27 @@ const TableCellContent = ({
 	</Box>
 );
 
-const NorthWestCornerMethod = ({
+const OptimalPlan = ({
 	solution,
 	suppliers,
 	consumers,
 	supplyQuantities,
 	demandQuantities,
 	costs,
-	setSolution,
+	positives,
 }) => {
 	const [totalCost, setTotalCost] = useState(0);
-	const calculateInitialSolution = () => {
-		const numericSupply = supplyQuantities.map(Number);
-		const numericDemand = demandQuantities.map(Number);
-		const { tableData, totalCost } = northWestCorner(
-			numericSupply,
-			numericDemand,
-			costs
+	const [newAllocation, setNewAllocation] = useState<number[][] | null>(null);
+	const [matrix, setMatrix] = useState<string[][] | null>(null);
+
+	const findNewOptimalPlam = () => {
+		const { newAllocation, signMatrix } = newOptimalPlan(
+			solution,
+			costs,
+			positives
 		);
-		setSolution(tableData);
-		setTotalCost(totalCost);
+		setNewAllocation(newAllocation);
+		setMatrix(signMatrix);
 	};
 
 	return (
@@ -45,11 +46,11 @@ const NorthWestCornerMethod = ({
 				color="white"
 				bg="blue.500"
 				my={4}
-				onClick={calculateInitialSolution}
+				onClick={findNewOptimalPlam}
 			>
-				Изчисли с метод на северозападния ъгъл
+				Намери оптимален план
 			</Button>
-			{solution && (
+			{newAllocation && (
 				<>
 					<Table.Root showColumnBorder>
 						<Table.Header>
@@ -83,7 +84,13 @@ const NorthWestCornerMethod = ({
 										<Table.Cell key={j} fontWeight="bold">
 											<TableCellContent
 												leftContent={cell || "-"}
-												rightContent={`(${costs[i][j]})`}
+												rightContent={
+													matrix &&
+													matrix[i] &&
+													matrix[i][j]
+														? `t${matrix[i][j]} (${costs[i][j]})`
+														: `(${costs[i][j]})`
+												}
 											/>
 										</Table.Cell>
 									))}
@@ -112,4 +119,4 @@ const NorthWestCornerMethod = ({
 	);
 };
 
-export default NorthWestCornerMethod;
+export default OptimalPlan;

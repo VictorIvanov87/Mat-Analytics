@@ -10,6 +10,12 @@ interface Props {
 	consumers: string[];
 	supplyQuantities: number[];
 	demandQuantities: number[];
+	setPositiveDeltasForMinimalCost?: (
+		deltas: {
+			delta: number;
+			cell: [number, number];
+		}[]
+	) => void;
 }
 
 const TableCellContent = ({
@@ -43,8 +49,8 @@ const PotentialsMethod = ({
 	consumers,
 	supplyQuantities,
 	demandQuantities,
+	setPositiveDeltasForMinimalCost,
 }: Props) => {
-	const [solution, setSolution] = React.useState<number[][] | null>(null);
 	const [potentials, setPotentials] = React.useState<{
 		u: number[];
 		v: number[];
@@ -60,9 +66,9 @@ const PotentialsMethod = ({
 
 	const handleOptimize = () => {
 		const optimalSolution = potentialsMethod(costs, initialSolution);
-		setSolution(optimalSolution.allocation);
 		setPotentials(optimalSolution.potentials);
 		setPositiveDeltas(optimalSolution.positive);
+		setPositiveDeltasForMinimalCost?.(optimalSolution.positive);
 	};
 
 	return (
@@ -77,7 +83,7 @@ const PotentialsMethod = ({
 				Изчисли потенциалите за{" "}
 				{initialSolutionTypeMap[initialSolutionType]}
 			</Button>
-			{solution && potentials && (
+			{initialSolution && potentials && (
 				<Table.Root showColumnBorder>
 					<Table.Header>
 						<Table.Row bg="transparent">
@@ -107,7 +113,7 @@ const PotentialsMethod = ({
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{solution.map((row, i) => (
+						{initialSolution.map((row, i) => (
 							<Table.Row key={i} bg="transparent">
 								<Table.Cell fontWeight="bold" w={20}>
 									<TableCellContent
@@ -127,7 +133,7 @@ const PotentialsMethod = ({
 											fontWeight="bold"
 											bg={
 												positiveDelta
-													? "red.100"
+													? "red.300"
 													: "transparent"
 											}
 										>

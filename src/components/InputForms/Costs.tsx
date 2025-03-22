@@ -43,6 +43,7 @@ function Costs({
 						{row.map((cost, colIndex) => (
 							<Table.Cell key={colIndex}>
 								<Input
+									bg="white"
 									value={cost}
 									onChange={(e) =>
 										handleCostChange(

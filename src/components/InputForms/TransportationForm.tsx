@@ -9,6 +9,7 @@ import NorthWestCornerMethod from "../Solutions/NorthWestCornerMethod";
 import PotentialsMethod from "../Solutions/PotentialsMethod";
 import Costs from "./Costs";
 import MinimalCostMethod from "../Solutions/MinimalCostMethod";
+import OptimalPlan from "../Solutions/OptimalPlan";
 
 const TransportationForm = () => {
 	const [suppliers, setSuppliers] = useState(["A"]);
@@ -26,6 +27,8 @@ const TransportationForm = () => {
 	>(null);
 	const [costs, setCosts] = useState([[0]]);
 	const [exampleTaskLoaded, setExampleTaskLoaded] = useState(false);
+	const [positiveDeltasForMinimalCost, setPositiveDeltasForMinimalCost] =
+		useState<{ delta: number; cell: [number, number] }[] | null>(null);
 
 	useEffect(() => {
 		if (exampleTaskLoaded) return;
@@ -174,10 +177,22 @@ const TransportationForm = () => {
 				consumers={consumers}
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
+				setPositiveDeltasForMinimalCost={
+					setPositiveDeltasForMinimalCost
+				}
+			/>
+			<OptimalPlan
+				solution={northWestSolution}
+				suppliers={suppliers}
+				consumers={consumers}
+				supplyQuantities={supplyQuantities}
+				demandQuantities={demandQuantities}
+				costs={costs}
+				positives={positiveDeltasForMinimalCost}
 			/>
 			<Separator size="md" mt={10} mb={10} />
 			<Heading as="h2" size="2xl" m={2} textAlign="center">
-				3. Изчисления по метода на минималният елемент:
+				4. Изчисления по метода на минималния елемент:
 			</Heading>
 			<MinimalCostMethod
 				solution={minimalCostSolution}
@@ -196,6 +211,18 @@ const TransportationForm = () => {
 				consumers={consumers}
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
+				setPositiveDeltasForMinimalCost={
+					setPositiveDeltasForMinimalCost
+				}
+			/>
+			<OptimalPlan
+				solution={minimalCostSolution}
+				suppliers={suppliers}
+				consumers={consumers}
+				supplyQuantities={supplyQuantities}
+				demandQuantities={demandQuantities}
+				costs={costs}
+				positives={positiveDeltasForMinimalCost}
 			/>
 			<Separator size="md" mt={10} mb={10} />
 		</Box>
