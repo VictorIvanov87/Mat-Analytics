@@ -188,7 +188,6 @@ const TransportationForm = () => {
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
 				costs={costs}
-				positives={positiveDeltasForMinimalCost}
 			/>
 			<Separator size="md" mt={10} mb={10} />
 			<Heading as="h2" size="2xl" m={2} textAlign="center">
@@ -222,7 +221,6 @@ const TransportationForm = () => {
 				supplyQuantities={supplyQuantities}
 				demandQuantities={demandQuantities}
 				costs={costs}
-				positives={positiveDeltasForMinimalCost}
 			/>
 			<Separator size="md" mt={10} mb={10} />
 		</Box>

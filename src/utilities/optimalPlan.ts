@@ -138,7 +138,6 @@ export function newOptimalPlan(
 	totalCost: number;
 } {
 	for (const positive of positives) {
-		debugger;
 		const cycle = buildCycle(allocation, positive.cell);
 		if (cycle && cycle.length > 3) {
 			const markedCycle = markPlusMinus(cycle);
@@ -161,8 +160,11 @@ export function iterativeOptimization(
 ): {
 	finalAllocation: number[][];
 	finalCost: number;
+	finalPotentials: { u: number[]; v: number[] };
+	finalPositives: PositiveDelta[];
 } {
 	let improved = true;
+	let iterations = 0;
 	while (improved) {
 		const oldCost = costOfPlan(allocation, costs);
 		const { u, v } = calculatePotentials(costs, allocation);
@@ -179,10 +181,20 @@ export function iterativeOptimization(
 		if (totalCost < oldCost) {
 			allocation = newAllocation;
 			improved = true;
+			iterations++;
 		}
 	}
+	const finalCost = costOfPlan(allocation, costs);
+	const finalPotentials = calculatePotentials(costs, allocation);
+	const finalPositives = getPositiveDeltas(
+		costs,
+		allocation,
+		finalPotentials
+	);
 	return {
 		finalAllocation: allocation,
-		finalCost: costOfPlan(allocation, costs),
+		finalCost,
+		finalPotentials,
+		finalPositives,
 	};
 }
