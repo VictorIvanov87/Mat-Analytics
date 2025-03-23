@@ -46,7 +46,7 @@
 
 ## Изчисления:
 
-Всички изчисления са поместени в `src/utilities`, като за метод е поместен в отделен файл:
+Всички изчисления са поместени в `src/utilities`, като всеки метод е поместен в отделен файл:
 
 [northWestCornerMethod.ts](src/utilities/northWestCornerMethod.ts)
 ```
