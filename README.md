@@ -48,7 +48,8 @@
 
 Всички изчисления са поместени в `src/utilities`, като за метод е поместен в отделен файл:
 
-northWestCornerMethod.ts:
+[northWestCornerMethod.ts](src/utilities/northWestCornerMethod.ts)
+```
 /**
  * Функция, която намира начално решение на транспортната задача по
  * метода на Северозападния ъгъл.
@@ -95,8 +96,10 @@ export function northWestCorner(supply, demand, costs) {
 
 	return { tableData, totalCost };
 }
+```
 
-minimalCostMethod.ts:
+[minimalCostMethod.ts](src/utilities/minimalCostMethod.ts)
+```
 /**
  * Функция, която намира начално решение на транспортната задача
  * по метода на минималния елемент (Minimal Cost Method).
@@ -159,9 +162,10 @@ const minimalCost = (supply: number[], demand: number[], costs: number[][]) => {
 };
 
 export default minimalCost;
+```
 
-
-potentialsMethod.ts
+[potentialsMethod.ts](src/utilities/potentialsMethod.ts)
+```
 /**
  * Типове данни:
  * Potentials - пазим потенциалите за всеки ред (u) и всяка колона (v).
@@ -271,8 +275,10 @@ export function potentialsMethod(
 
 	return { allocation, costs, potentials, positive };
 }
+```
 
-optimalPlan.ts
+[optimalPlan.ts](src/utilities/optimalPlan.ts)
+```
 /**
  * Тук се намира логиката за подобрение на начално решение
  * чрез метода на потенциалите (изграждане на цикъл и преразпределяне).
@@ -550,3 +556,4 @@ export function iterativeOptimization(
 		finalPositives,
 	};
 }
+```
